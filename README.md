@@ -1,8 +1,8 @@
 # Matno Contest - Back-End Programming
 
-# SampleCaptchaAPI
+# Sample Captcha API
 
-Implementing a captcha service using PHP and javascript to can use it anywhere such as Web.
+Implementing a **captcha service** using PHP and javascript to can use it anywhere such as Web.
 
 
 ## Using
