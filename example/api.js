@@ -94,13 +94,24 @@
 	}
 
 	const verifing = function(index) {
-		ajax(function(res) { alert(res)}, link+"index.php", {
+		ajax(function(res) {
+			// console.log(res)
+			let json=JSON.parse(res)
+			console.log(json)
+			if(!json || !json.result || !json.result.token) {
+				return
+			}
+			let token=json.result.token
+			let field=document.querySelector("#"+list[index].outputID)
+			field.value=token
+			console.log(token)
+		}, link+"index.php", {
 			method: "verify",
 			value: list[index].text.value,
-			code: list[index].text.value,
-			session: list[index].session
+			code: list[index].session,
 		}, {
 			key: keys,
+			token: tokens,
 		})
 	}
 
@@ -136,7 +147,7 @@
 			// console.log(form)
 			// console.log(code)
 			form.addEventListener("submit", function() {
-				alert("hey")
+				// alert("hello!")
 			})
 			let imageID="thinCaptcha-image"+count
 			let imageSRC=link+"captcha.php?code="+json.result.code+"&token="+tokens+"&key="+keys
@@ -149,9 +160,9 @@
 			// console.log(reload)
 			// reload.addEventListener("click", function() { reload(count-1) })
 			let textID="thinCaptcha-text"+count
-			code.innerHTML+="<input id=\""+textID+"\" type=\"text\">"
+			code.innerHTML+="<input required=\"true\" id=\""+textID+"\" type=\"text\">"
 			let outputID="thinCaptcha-output"+count
-			code.innerHTML+="<input id=\""+outputID+"\" type=\"text\">"
+			code.innerHTML+="<input required=\"true\" id=\""+outputID+"\" type=\"text\" style=\"display:none;\">"
 			let output=code.querySelector("#"+outputID)
 			let verifyID="thinCaptcha-verify"+count
 			code.innerHTML+="<a id=\""+verifyID+"\">Verify</a>"
