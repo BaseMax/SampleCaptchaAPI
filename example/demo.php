@@ -1,8 +1,29 @@
 <?php
 session_start();
-if(isset($_POST["submit"])) {
-	print $_SESSION["captcha"]."<br>";
-	print $_POST["code"]."<br>";
+include "_netphp.php";
+// print_r($_POST);
+// Array ( [input1] => Jane [input2] => Smith [input3] => max base code @ g m a i l . com [yournameCode1] => 7v0c5ku1lgx6pp17bh67fdausml1lxyoih24uo46fnd4dzodqi )
+if(isset($_POST["submit"], $_POST["yournameCode1"], $_POST["input1"], $_POST["input2"], $_POST["input3"])) {
+	$token=$_POST["yournameCode1"];
+	$res=post("http://localhost/matno3/SampleCaptchaAPI/src/index.php?method=done&token=".$token, [], [
+		"Token: d4f5g6df4gd5f6ge4r89rf48",
+		"Key: x1x1x1x1x1x1",
+	]);
+	// print_r($res);
+	// print_r($res[0]);
+	$json=json_decode($res[0], true);
+	if(is_array($json) and $json != null and count($json) > 0) {
+		if($json["status"] == "success") {
+			// write your code here
+			exit("Done!\n");
+		}
+		else {
+			exit("Error: captcha is not valid!");
+		}
+	}
+	else {
+		exit("Error: API have error!\n");
+	}
 }
 ?>
 <!-- <img id="image" src="captcha.php">
@@ -32,15 +53,15 @@ if(isset($_POST["submit"])) {
 				<ul>
 					<li>
 						<label for="input1">First Name</label>
-						<input class="jfk-textinput" id="input1" name="input1" type="text" value="Jane" disabled aria-disabled="true">
+						<input class="jfk-textinput" id="input1" name="input1" type="text" value="Jane">
 					</li>
 					<li>
 						<label for="input2">Last Name</label>
-						<input class="jfk-textinput" id="input2" name="input2" type="text" value="Smith" disabled aria-disabled="true">
+						<input class="jfk-textinput" id="input2" name="input2" type="text" value="Smith">
 					</li>
 					<li>
 						<label for="input3">Email</label>
-						<input class="jfk-textinput" id="input3" name="input3" type="text" value="max base code @ g m a i l . com" disabled aria-disabled="true">
+						<input class="jfk-textinput" id="input3" name="input3" type="text" value="max base code @ g m a i l . com">
 					</li>
 					<li>
 						<p>Pick your favorite color:</p>
@@ -53,7 +74,7 @@ if(isset($_POST["submit"])) {
 						<div id="thincaptcha-code1"></div>
 					</li>
 					<li>
-						<input type="submit" value="Submit">
+						<input name="submit" type="submit" value="Submit">
 					</li>
 				</ul>
 			</fieldset>
@@ -63,7 +84,7 @@ if(isset($_POST["submit"])) {
 	window.addEventListener("load", function() {
 		thinCaptcha.setLink("http://localhost/matno3/SampleCaptchaAPI/src/")
 		thinCaptcha.setKey("x1x1x1x1x1x1", "d4f5g6df4gd5f6ge4r89rf48")
-		thinCaptcha.apply("#thincaptcha-form1", "#thincaptcha-code1");
+		thinCaptcha.apply("#thincaptcha-form1", "#thincaptcha-code1", "yournameCode1")
 	})
 	</script>
 </body>

@@ -98,6 +98,7 @@ if($headers != null && is_array($headers) and count($headers) > 0) {
 		}
 	}
 	else {
+		print_r($headers);
 		display(["status"=>"failed", "message"=>"You did not have access to this webservice without token and key!"]);
 	}
 }

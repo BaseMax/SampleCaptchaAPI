@@ -134,7 +134,7 @@
 	*
 	* @return void
 	**/
-	const apply = function(formSelector, codeSelector) {
+	const apply = function(formSelector, codeSelector, fieldCodeName) {
 		ajax(function(res) {
 			// console.log(res)
 			let json=JSON.parse(res)
@@ -162,7 +162,7 @@
 			let textID="thinCaptcha-text"+count
 			code.innerHTML+="<input required=\"true\" id=\""+textID+"\" type=\"text\">"
 			let outputID="thinCaptcha-output"+count
-			code.innerHTML+="<input required=\"true\" id=\""+outputID+"\" type=\"text\" style=\"display:none;\">"
+			code.innerHTML+="<input name=\""+fieldCodeName+"\" required=\"true\" id=\""+outputID+"\" type=\"text\" style=\"display:none;\">"
 			let output=code.querySelector("#"+outputID)
 			let verifyID="thinCaptcha-verify"+count
 			code.innerHTML+="<a id=\""+verifyID+"\">Verify</a>"
