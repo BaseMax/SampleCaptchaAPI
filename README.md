@@ -6,6 +6,10 @@ Implementing a **captcha service** using PHP and javascript to can use it anywhe
 
 ## Using
 
+We did create one example project in `example/` directory.
+
+![sample captchca api](example/screenshot1.png)
+
 ### Create captcha
 
 http://localhost/matno3/?method=create
