@@ -1,5 +1,7 @@
 (function(window, document) {
 	"use strict"
+	let link=""
+
 	let keys=""
 
 	let tokens=""
@@ -7,6 +9,20 @@
 	let count=0
 
 	let list=[]
+
+	/**
+	* @function setLink
+	*
+	* @goal : setLink is to set main link for loading thinCaptcha files...
+	*
+	* @return bool
+	**/
+
+	const setLink = function(url) {
+		link=url
+		return true
+	}
+
 	/**
 	* @function setKey
 	*
@@ -78,7 +94,7 @@
 	}
 
 	const verifing = function(index) {
-		ajax(function(res) { alert(res)}, "index.php", {
+		ajax(function(res) { alert(res)}, link+"index.php", {
 			method: "verify",
 			value: list[index].text.value,
 			code: list[index].text.value,
@@ -123,7 +139,7 @@
 				alert("hey")
 			})
 			let imageID="thinCaptcha-image"+count
-			let imageSRC="captcha.php?code="+json.result.code+"&token="+tokens+"&key="+keys
+			let imageSRC=link+"captcha.php?code="+json.result.code+"&token="+tokens+"&key="+keys
 			code.innerHTML="<img id=\""+imageID+"\" src=\""+imageSRC+"\">"
 			let image=code.querySelector("#"+imageID)
 			// code.innerHTML+="<a onclick=\"document.querySelector('#"+imageID+"').src='"+imageSRC+"'\">reload</a>"
@@ -172,7 +188,7 @@
 				output: output,
 			})
 			count++
-		}, "index.php", {
+		}, link+"index.php", {
 			method: "create",
 			key: keys,
 		}, {
@@ -189,6 +205,7 @@
 	* @return struct
 	**/
 	window.thinCaptcha = {
+		setLink: setLink,
 		apply: apply,
 		setKey: setKey,
 		ajax: ajax,
