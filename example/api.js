@@ -94,11 +94,18 @@
 	}
 
 	const verifing = function(index) {
+		if(list[index].used == true) {
+			alert("You cannot try again captcha!");
+			return
+		}
 		ajax(function(res) {
 			// console.log(res)
 			let json=JSON.parse(res)
 			console.log(json)
 			if(!json || !json.result || !json.result.token) {
+				console.log("it's not valid!")
+				list[index].used=true
+				console.log(list[index].used)
 				return
 			}
 			let token=json.result.token
@@ -124,7 +131,13 @@
 	**/
 	const reload = function(index) {
 		// console.log("reload")
-		apply(list[index].formSelector, list[index].codeSelector)
+		// console.log(list[index].used)
+		if(list[index].used == false) {
+			apply(list[index].formSelector, list[index].codeSelector, list[index].fieldCodeName, index)
+		}
+		else {
+			alert("You cannot reload captcha!");
+		}
 	}
 
 	/**
@@ -134,7 +147,12 @@
 	*
 	* @return void
 	**/
-	const apply = function(formSelector, codeSelector, fieldCodeName) {
+	const apply = function(formSelector, codeSelector, fieldCodeName, listID) {
+		if(listID !== undefined) {
+			// alert("you want to modify this item.")
+			// alert(list)
+			// alert(list.length)
+		}
 		ajax(function(res) {
 			// console.log(res)
 			let json=JSON.parse(res)
@@ -155,10 +173,10 @@
 			let image=code.querySelector("#"+imageID)
 			// code.innerHTML+="<a onclick=\"document.querySelector('#"+imageID+"').src='"+imageSRC+"'\">reload</a>"
 			let reloadID="thinCaptcha-reload"+count
-			code.innerHTML+="<b onlick=\"thinCaptcha.reload("+(count-1)+")\" id=\""+reloadID+"\">reload</b><br>"
+			code.innerHTML+="<div onlick=\"thinCaptcha.reload("+(count-1)+")\" id=\""+reloadID+"\">reload</div><br>"
 			let reload=code.querySelector("#"+reloadID)
 			// console.log(reload)
-			// reload.addEventListener("click", function() { reload(count-1) })
+			reload.addEventListener("click", function() { reload(count-1) })
 			let textID="thinCaptcha-text"+count
 			code.innerHTML+="<input required=\"true\" id=\""+textID+"\" type=\"text\">"
 			let outputID="thinCaptcha-output"+count
@@ -175,9 +193,10 @@
 			text.addEventListener("copy", function() { action(count-1) })
 			text.addEventListener("cut", function() { action(count-1) })
 			text.addEventListener("paste", function() { action(count-1) })
-			list.push({
+			let values={
 				formSelector: formSelector,
 				codeSelector: codeSelector,
+				fieldCodeName: fieldCodeName,
 
 				code: code,
 				form: form,
@@ -197,8 +216,16 @@
 
 				outputID: outputID,
 				output: output,
-			})
-			count++
+
+				used: false,
+			}
+			if(listID === undefined) {
+				list.push(values)
+				count++
+			}
+			else {
+				list[listID]=values
+			}
 		}, link+"index.php", {
 			method: "create",
 			key: keys,

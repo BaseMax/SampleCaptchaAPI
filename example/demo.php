@@ -84,7 +84,7 @@ if(isset($_POST["submit"], $_POST["yournameCode1"], $_POST["input1"], $_POST["in
 	window.addEventListener("load", function() {
 		thinCaptcha.setLink("http://localhost/matno3/SampleCaptchaAPI/src/")
 		thinCaptcha.setKey("x1x1x1x1x1x1", "d4f5g6df4gd5f6ge4r89rf48")
-		thinCaptcha.apply("#thincaptcha-form1", "#thincaptcha-code1", "yournameCode1")
+		thinCaptcha.apply("#thincaptcha-form1", "#thincaptcha-code1", "yournameCode1", undefined)
 	})
 	</script>
 </body>
