@@ -57,8 +57,13 @@ if($headers != null && is_array($headers) and count($headers) > 0) {
 						if($db->count("captcha", ["token"=>$token]) == 0) {
 							display(["status"=>"failed", "message"=>"Your session is not valid!"], $app);
 						}
-						$captcha=$db->select("captcha", ["token"=>$token]);
-						if($captcha["hasUse"] == 0) {
+						$clauses=["token"=>$token];
+						$captcha=$db->select("captcha", $clauses);
+						if($captcha["hasUse"] == -1) {
+							display(["status"=>"failed", "message"=>"This captcha is canceled!"], $app);
+						}
+						else if($captcha["hasUse"] == 0) {
+							$db->update("captcha", $clauses, ["hasUse"=>1]);
 							display(["status"=>"success", "message"=>"Enjoy from it, Done!"], $app);
 						}
 						else {
@@ -81,6 +86,7 @@ if($headers != null && is_array($headers) and count($headers) > 0) {
 						}
 						else {
 							display(["status"=>"failed", "message"=>"Your session is not good!"], $app);
+							$db->update("captcha", $clauses, ["hasUse"=>-1]);
 						}
 						print_r($captcha);
 					}
