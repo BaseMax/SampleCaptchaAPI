@@ -52,7 +52,7 @@
 		// console.log(list[index]["textID"])
 		// // let text=document.querySelector("#"+list[index].textID)
 		// console.log(text.value)
-		console.log(list[index].text.value)
+		// console.log(list[index].text.value)
 	}
 
 	String.prototype.rtrim = function (s) {
@@ -94,6 +94,7 @@
 	}
 
 	const verifing = function(index) {
+		console.log("Captcha #"+index)
 		if(list[index].used == true) {
 			alert("You cannot try again captcha!");
 			return
@@ -114,12 +115,16 @@
 			console.log(token)
 		}, link+"index.php", {
 			method: "verify",
-			value: list[index].text.value,
+			value: document.querySelector("#"+list[index].textID).value,
 			code: list[index].session,
 		}, {
 			key: keys,
 			token: tokens,
 		})
+		console.log(list[index].text)
+		console.log(list[index].text.value)
+		console.log(document.querySelector("#"+list[index].textID))
+		console.log(document.querySelector("#"+list[index].textID).value)
 	}
 
 	/**
@@ -167,32 +172,39 @@
 			form.addEventListener("submit", function() {
 				// alert("hello!")
 			})
+
 			let imageID="thinCaptcha-image"+count
 			let imageSRC=link+"captcha.php?code="+json.result.code+"&token="+tokens+"&key="+keys
 			code.innerHTML="<img id=\""+imageID+"\" src=\""+imageSRC+"\">"
 			let image=code.querySelector("#"+imageID)
+
 			// code.innerHTML+="<a onclick=\"document.querySelector('#"+imageID+"').src='"+imageSRC+"'\">reload</a>"
 			let reloadID="thinCaptcha-reload"+count
-			code.innerHTML+="<div onlick=\"thinCaptcha.reload("+(count-1)+")\" id=\""+reloadID+"\">reload</div><br>"
+			code.innerHTML+="<div onlick=\"thinCaptcha.reload("+(count)+")\" id=\""+reloadID+"\">reload</div><br>"
 			let reload=code.querySelector("#"+reloadID)
 			// console.log(reload)
-			reload.addEventListener("click", function() { reload(count-1) })
+			// reload.addEventListener("click", function() { reload(count-1) })
+
 			let textID="thinCaptcha-text"+count
-			code.innerHTML+="<input required=\"true\" id=\""+textID+"\" type=\"text\">"
+			code.innerHTML+="<input onblur=\"thinCaptcha.action("+count+")\" onkeypress=\"thinCaptcha.action("+count+")\" onkeyup=\"thinCaptcha.action("+count+")\" oncopy=\"thinCaptcha.action("+count+")\" oncut=\"thinCaptcha.action("+count+")\" onpaste=\"thinCaptcha.action("+count+")\" required=\"true\" id=\""+textID+"\" type=\"text\">"
+			let text=code.querySelector("#"+textID)
+
 			let outputID="thinCaptcha-output"+count
 			code.innerHTML+="<input name=\""+fieldCodeName+"\" required=\"true\" id=\""+outputID+"\" type=\"text\" style=\"display:none;\">"
 			let output=code.querySelector("#"+outputID)
+
 			let verifyID="thinCaptcha-verify"+count
-			code.innerHTML+="<a id=\""+verifyID+"\">Verify</a>"
+			code.innerHTML+="<a onclick=\"thinCaptcha.verifing("+(count)+")\" id=\""+verifyID+"\">Verify</a>"
 			let verify=code.querySelector("#"+verifyID)
-			verify.addEventListener("click", function() { verifing(count-1) })
-			let text=code.querySelector("#"+textID)
-			text.addEventListener("blur", function() { action(count-1) })
-			text.addEventListener("keypress", function() { action(count-1) })
-			text.addEventListener("keyup", function() { action(count-1) })
-			text.addEventListener("copy", function() { action(count-1) })
-			text.addEventListener("cut", function() { action(count-1) })
-			text.addEventListener("paste", function() { action(count-1) })
+			// verify.addEventListener("click", function() { verifing(count-1) })
+
+			// text.addEventListener("blur", function() { action(count-1) })
+			// text.addEventListener("keypress", function() { action(count-1) })
+			// text.addEventListener("keyup", function() { action(count-1) })
+			// text.addEventListener("copy", function() { action(count-1) })
+			// text.addEventListener("cut", function() { action(count-1) })
+			// text.addEventListener("paste", function() { action(count-1) })
+
 			let values={
 				formSelector: formSelector,
 				codeSelector: codeSelector,
@@ -248,6 +260,7 @@
 		setKey: setKey,
 		ajax: ajax,
 		reload: reload,
+		action: action,
 		verifing: verifing,
 		list: list,
 	}

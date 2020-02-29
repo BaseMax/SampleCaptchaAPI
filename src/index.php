@@ -78,14 +78,16 @@ if($headers != null && is_array($headers) and count($headers) > 0) {
 						if($db->count("captcha", ["codes"=>$code]) == 0) {
 							display(["status"=>"failed", "message"=>"Your session is not valid***!"], $app);
 						}
-						$captcha=$db->select("captcha", ["codes"=>$code]);
+						$clauses=["codes"=>$code];
+						$captcha=$db->select("captcha", $clauses);
 						if($captcha["code"] == $value) {
 							display(["status"=>"success", "message"=>"You are wellcome!", "result"=>[
 								"token"=>$captcha["token"],
 							]], $app);
 						}
 						else {
-							display(["status"=>"failed", "message"=>"Your session is not good!"], $app);
+							$cap=$db->select("captcha", $clauses);
+							display(["status"=>"failed", "message"=>"Your session is not good!", "test"=>$cap, "test2"=>$data], $app);
 							$db->update("captcha", $clauses, ["hasUse"=>-1]);
 						}
 						print_r($captcha);
