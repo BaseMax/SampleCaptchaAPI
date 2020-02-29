@@ -12,6 +12,8 @@ We did create one example project in `example/` directory.
 
 ### Create captcha
 
+Every requests need `token` and `key` value in Headers.
+
 http://localhost/matno3/?method=create
 
 ```json
